@@ -20,7 +20,7 @@ function update_ecam_message(message)
     XPLMSetDataf(ecam_message_dataref, message)
 end
 
--- Funciones de activación y desactivación del autopilot (AP1 y AP2)
+-- Funciones de activación y desactivación del autopilot (AP1 y AP2
 function activate_ap1()
     XPLMSetDatai(autopilot_engaged, 1)
     update_ecam_message("AP1 Engaged")
