@@ -31,6 +31,12 @@ local datarefs = {
 
     -- Combustible
     fuel_status_ref = "sim/flightmodel/fuel/fuel_status"
+
+    -- Datarefs para energía externa
+    dataref_external_power_connected = find_dataref("your/dataref/external_power_connected")
+    dataref_external_power_voltage = find_dataref("your/dataref/external_power_voltage")
+    dataref_external_power_frequency = find_dataref("your/dataref/external_power_frequency")
+    dataref_external_power_switch = find_dataref("your/dataref/external_power_switch")  -- Dataref del botón
 }
 
 -- Función para obtener el valor de un Dataref
