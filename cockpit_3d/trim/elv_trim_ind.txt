@@ -1,4 +1,0 @@
-A
-750 version
-y_bottom   y_top
--25	25		// comment: indicator range
