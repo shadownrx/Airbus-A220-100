@@ -1,11 +1,11 @@
 -- datarefs.lua
 
--- Requiere módulos y configuración necesarios
+-- Require section
 require("config")
 
--- Definir Datarefs
+-- TODO: Have datarefs as variables instead
 local datarefs = {
-    -- Sensores
+    -- Sensors
     altitude_ref = "sim/flightmodel/position/elevation",
     heading_ref = "sim/flightmodel/position/heading",
     speed_ref = "sim/flightmodel/position/true_airspeed",
@@ -18,33 +18,34 @@ local datarefs = {
     wind_direction_ref = "sim/weather/wind_direction",
     wind_speed_ref = "sim/weather/wind_speed",
 
-    -- Motores
+    -- Engines
     engine1_status_ref = "sim/engines/engine/1/status",
     engine2_status_ref = "sim/engines/engine/2/status",
     apu_status_ref = "sim/engines/apu/status",
 
-    -- Hidráulico
+    -- Hydraulics
     hydraulic_status_ref = "sim/flightmodel/engine/1/hydraulic_pressure",
 
-    -- Eléctrico
+    -- Electrical
     electrical_status_ref = "sim/flightmodel/electrical/voltage",
 
-    -- Combustible
+    -- Fuel
     fuel_status_ref = "sim/flightmodel/fuel/fuel_status"
 
-    -- Datarefs para energía externa
+    -- External Power
     dataref_external_power_connected = find_dataref("your/dataref/external_power_connected")
     dataref_external_power_voltage = find_dataref("your/dataref/external_power_voltage")
     dataref_external_power_frequency = find_dataref("your/dataref/external_power_frequency")
-    dataref_external_power_switch = find_dataref("your/dataref/external_power_switch")  -- Dataref del botón
+    dataref_external_power_switch = find_dataref("your/dataref/external_power_switch")
 }
 
--- Función para obtener el valor de un Dataref
+-- TODO: setters & getters should be added oinly when necessary. 
+-- Ideally we would have datarefs per system and not centralized.
+
 function get_dataref_value(dataref_name)
     return datarefs[dataref_name]
 end
 
--- Función para leer datos desde el simulador
 function read_datarefs()
     local data = {}
     data.altitude = get_dataref_value("altitude_ref")
@@ -69,10 +70,9 @@ function read_datarefs()
     return data
 end
 
--- Función para actualizar los Datarefs en el simulador
+-- Setting datarefs in the Simulator. The following are just examples,
+-- it should be adjustead according to the API of the simulator
 function update_datarefs(data)
-    -- Aquí implementas la lógica para actualizar los datarefs del simulador
-    -- Ejemplo de actualización de datarefs (ajustar según la API del simulador):
     set(datarefs.altitude_ref, data.altitude)
     set(datarefs.heading_ref, data.heading)
     set(datarefs.speed_ref, data.speed)
@@ -93,21 +93,20 @@ function update_datarefs(data)
     set(datarefs.fuel_status_ref, data.fuel_status)
 end
 
--- Función para inicializar los Datarefs
+-- TODO: This can be wraped inside each component and
+-- should respond to the SASL lifecycle
 function initialize_datarefs()
-    print("Inicializando Datarefs...")
-    -- Aquí puedes incluir lógica adicional para inicializar los datarefs
+    print("Initializing Datarefs...")
 end
 
--- Función para actualizar Datarefs periódicamente
+-- TODO: should be under the `update` method provided by SASL
 function datarefs_update_operation()
     while true do
         local sensor_data = read_datarefs()
         update_datarefs(sensor_data)
-        run_after_delay(1, datarefs_update_operation) -- Actualización cada segundo
+        run_after_delay(1, datarefs_update_operation) -- TODO: Should be milliseconds
     end
 end
 
--- Iniciar la actualización de Datarefs
 initialize_datarefs()
 datarefs_update_operation()

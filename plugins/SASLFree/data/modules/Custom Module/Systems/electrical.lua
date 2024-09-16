@@ -1,33 +1,30 @@
 -- electrical.lua
 
--- Cargar la configuración
 require("config")
 
--- Variables del sistema eléctrico
-local battery_voltage = 0
+
+local battery_voltage = 0       -- volts
 local screens_active = false
 local ecam_initialized = false
 
--- Inicialización del sistema eléctrico
 function initialize_electrical_system()
     battery_voltage = 0
     screens_active = false
     ecam_initialized = false
-    print("Sistema eléctrico inicializado")
+    print("Electrical system initialized")
 end
 
 -- Encender la batería
 function activate_battery()
     if battery_voltage >= ElectricalConfig.battery_voltage_required then
         screens_active = true
-        print("Baterías activadas. Voltaje suficiente.")
+        print("Baterries ON. Voltage OK.")
         initialize_screens()
     else
-        print("Advertencia: Voltaje insuficiente para activar las baterías.")
+        print("Warning: Voltage is low.")
     end
 end
 
--- Función para inicializar las pantallas
 function initialize_screens()
     if screens_active then
         -- Temporizador para el arranque de las pantallas
@@ -39,46 +36,37 @@ function initialize_screens()
     end
 end
 
--- Actualizar la pantalla del ECAM
 function update_ecam_display(message)
     if ecam_initialized then
         -- Mostrar el mensaje en el ECAM
         show_message_on_ecam(message)
     else
-        print("ECAM no está inicializado.")
+        print("ECAM not initialized.")
     end
 end
 
--- Función para mostrar mensajes en el ECAM (reemplaza a print)
+-- TODO: this is also implemented on other components.
+-- We could use a shared component
 function show_message_on_ecam(message)
-    -- Aquí puedes implementar la lógica para mostrar mensajes en el ECAM
-    -- En lugar de imprimir en consola, se mostrarán en la pantalla del ECAM
     draw_text_on_ecam(message)
 end
 
--- Función simulada para dibujar texto en el ECAM (ejemplo simple)
 function draw_text_on_ecam(message)
-    -- Lógica para dibujar el texto en la pantalla del ECAM
-    -- Esto debería conectarse con el sistema gráfico del avión
-    print("ECAM: " .. message)  -- Esta línea es para depuración; en un simulador real, se reemplaza por un dibujo en pantalla
+    print("ECAM: " .. message) 
 end
 
--- Función para ejecutar una acción después de un retraso (simulando un temporizador)
 function run_after_delay(delay, action)
-    -- Simulación de retraso (en un entorno real, esto se haría de otra manera)
     local start_time = os.time()
     while os.time() - start_time < delay do
-        -- Esperar
+        -- TODO: use SASL built-in functions
     end
     action()
 end
 
--- Activación del sistema eléctrico
 function activate_electrical_system()
-    print("Encendiendo sistema eléctrico...")
+    print("Turning on electrical system...")
     battery_voltage = ElectricalConfig.battery_voltage_required
     activate_battery()
 end
 
--- Inicializar el sistema al cargar
 initialize_electrical_system()

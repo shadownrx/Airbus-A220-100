@@ -1,10 +1,9 @@
 -- pfd_display.lua
 
--- Requiere módulos y configuración necesarios
 require("config")
-require("datarefs")  -- Asegúrate de que `datarefs.lua` esté disponible en el mismo directorio
+require("datarefs") 
 
--- Configuración de la pantalla PFD
+-- TODO: use variables instead of table
 local PFD = {
     altitude = 0,
     heading = 0,
@@ -14,18 +13,13 @@ local PFD = {
     roll = 0
 }
 
--- Inicializar el display PFD
 function initialize_PFD()
-    print("Inicializando PFD...")
-    -- Aquí puedes configurar la interfaz gráfica del PFD
+    print("Initializing PFD...")
 end
 
--- Función para actualizar el PFD
 function update_PFD()
-    -- Leer datos desde el simulador
     local data = read_datarefs()
     
-    -- Actualizar valores del PFD
     PFD.altitude = data.altitude
     PFD.heading = data.heading
     PFD.airspeed = data.speed
@@ -33,32 +27,25 @@ function update_PFD()
     PFD.pitch = data.pitch
     PFD.roll = data.roll
     
-    -- Actualizar la interfaz gráfica del PFD
     update_pfd_graphics()
 end
 
--- Función para actualizar la interfaz gráfica del PFD
 function update_pfd_graphics()
-    -- Actualización de gráficos y elementos del PFD
-    -- Ejemplo de simulación de actualización gráfica
-    -- Puedes usar funciones gráficas del SDK de X-Plane para renderizar
-    print("Actualizando gráficos del PFD:")
-    print("Altitud: " .. PFD.altitude .. " ft")
-    print("Rumbo: " .. PFD.heading .. "°")
-    print("Velocidad: " .. PFD.airspeed .. " knots")
-    print("Velocidad Vertical: " .. PFD.vertical_speed .. " ft/min")
-    print("Inclinación: " .. PFD.pitch .. "°")
-    print("Alabeo: " .. PFD.roll .. "°")
+    print("Updating PFD graphics:")
+    print("Altitude: " .. PFD.altitude .. " ft")
+    print("Heading: " .. PFD.heading .. "°")
+    print("Speed: " .. PFD.airspeed .. " knots")
+    print("Vertical speed: " .. PFD.vertical_speed .. " ft/min")
+    print("Pitch: " .. PFD.pitch .. "°")
+    print("Bank: " .. PFD.roll .. "°")
 end
 
--- Función para inicializar y actualizar el PFD periódicamente
 function pfd_update_operation()
     initialize_PFD()
     while true do
         update_PFD()
-        run_after_delay(1, pfd_update_operation) -- Actualización cada segundo
+        run_after_delay(1, pfd_update_operation) -- TODO: use SASL lifecycle
     end
 end
 
--- Iniciar la actualización del PFD
 pfd_update_operation()

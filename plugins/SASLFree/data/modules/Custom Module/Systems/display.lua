@@ -1,10 +1,9 @@
 -- display.lua
 
--- Cargar módulos y configuración necesarios
 require("config")
-require("sensors")  -- Asegúrate de que `sensors.lua` esté disponible en el mismo directorio
+require("sensors")  
 
--- Configuración de pantalla
+-- TODO: variables instead of tables
 local PFD = {
     altitude = 0,
     heading = 0,
@@ -30,7 +29,7 @@ local ECAM = {
     fuel_status = "NORMAL"
 }
 
--- Función para actualizar el PFD
+-- TODO: use `update` function from SASL
 function update_PFD()
     PFD.altitude = get_altitude()
     PFD.heading = get_heading()
@@ -39,26 +38,23 @@ function update_PFD()
     PFD.pitch = get_pitch()
     PFD.roll = get_roll()
 
-    -- Simulación de actualización gráfica en PFD
-    print("PFD actualizado:")
-    print("Altitud: " .. PFD.altitude .. " ft")
-    print("Rumbo: " .. PFD.heading .. "°")
-    print("Velocidad: " .. PFD.airspeed .. " knots")
-    print("Velocidad Vertical: " .. PFD.vertical_speed .. " ft/min")
-    print("Inclinación: " .. PFD.pitch .. "°")
-    print("Alabeo: " .. PFD.roll .. "°")
+    print("PFD updated:")
+    print("Altitude: " .. PFD.altitude .. " ft")
+    print("Heading: " .. PFD.heading .. "°")
+    print("Speed: " .. PFD.airspeed .. " knots")
+    print("Vertical speed: " .. PFD.vertical_speed .. " ft/min")
+    print("Pitch: " .. PFD.pitch .. "°")
+    print("Bank: " .. PFD.roll .. "°")
 end
 
--- Función para actualizar el ND
 function update_ND()
     local wind = get_wind_info()
     ND.wind_direction = wind.direction
     ND.wind_speed = wind.speed
 
-    -- Aquí deberías implementar la lógica para actualizar los waypoints en ND
-    -- Simulación de actualización gráfica en ND
-    print("ND actualizado:")
-    print("Viento: " .. ND.wind_speed .. " knots desde " .. ND.wind_direction .. "°")
+    -- Waypoints should be updated in this section
+    print("ND updated:")
+    print("Wind: " .. ND.wind_speed .. " knots from " .. ND.wind_direction .. "°")
 
     -- Ejemplo de impresión de waypoints
     print("Waypoints:")
@@ -67,16 +63,14 @@ function update_ND()
     end
 end
 
--- Función para actualizar el ECAM
 function update_ECAM()
-    ECAM.engine1_status = "RUNNING"  -- Puedes ajustar según el estado real de los motores
-    ECAM.engine2_status = "RUNNING"  -- Igual que arriba
-    ECAM.apu_status = "ON"           -- Ajusta según el estado real del APU
-    ECAM.hydraulic_status = "NORMAL" -- Puede ser "NORMAL", "LOW", "HIGH", etc.
-    ECAM.electrical_status = "NORMAL" -- Similar a los otros estados
-    ECAM.fuel_status = "NORMAL"      -- Ajustar según el estado real del sistema de combustible
+    ECAM.engine1_status = "RUNNING"     -- Use state machine
+    ECAM.engine2_status = "RUNNING" 
+    ECAM.apu_status = "ON"              -- Use state machine
+    ECAM.hydraulic_status = "NORMAL"    -- Use state machine
+    ECAM.electrical_status = "NORMAL"   -- Use state machine
+    ECAM.fuel_status = "NORMAL"         -- Use state machine
 
-    -- Simulación de actualización gráfica en ECAM
     print("ECAM actualizado:")
     print("Motor 1: " .. ECAM.engine1_status)
     print("Motor 2: " .. ECAM.engine2_status)
@@ -86,27 +80,26 @@ function update_ECAM()
     print("Combustible: " .. ECAM.fuel_status)
 end
 
--- Función para actualizar todos los displays
+-- TODO: should be done through SASL lifecycle
 function update_displays()
     update_PFD()
     update_ND()
     update_ECAM()
 end
 
--- Función para inicializar los displays
+-- TODO: should be done through SASL lifecycle
 function initialize_displays()
     print("Inicializando displays...")
-    update_displays()  -- Llamada inicial para actualizar los displays
+    update_displays()  
 end
 
--- Simulación continua de actualización de displays
+-- TODO: should be done through SASL lifecycle
 function display_update_operation()
     while true do
         update_displays()
-        run_after_delay(1, display_update_operation) -- Actualización cada segundo
+        run_after_delay(1, display_update_operation) 
     end
 end
 
--- Iniciar la simulación de actualización de displays
 initialize_displays()
 display_update_operation()
